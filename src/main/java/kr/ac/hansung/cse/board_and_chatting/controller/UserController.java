@@ -4,11 +4,14 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
+import kr.ac.hansung.cse.board_and_chatting.exception.APIResponse;
 import kr.ac.hansung.cse.board_and_chatting.exception.SignUpForException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
+import kr.ac.hansung.cse.board_and_chatting.exception.status.SuccessStatus;
 import kr.ac.hansung.cse.board_and_chatting.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +42,14 @@ public class UserController {
 
         session.setAttribute("user", user);
 
-        return ResponseEntity.ok(UserDto.toDto(user));
+        return APIResponse.toResponseEntity(
+                APIResponse.builder()
+                        .status(SuccessStatus.SIGN_UP_SUCCESS.getStatus())
+                        .code(SuccessStatus.SIGN_UP_SUCCESS.getCode())
+                        .message(SuccessStatus.SIGN_UP_SUCCESS.getMessage())
+                        .result(user)
+                        .build()
+        );
 
     }
 }

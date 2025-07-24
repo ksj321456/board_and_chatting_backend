@@ -23,7 +23,7 @@ public class UserDto {
 
     private Authority authority;
 
-    private byte[] user_picture;
+    private byte[] userPicture;
 
     public static UserDto toDto(User user) {
         return UserDto.builder()

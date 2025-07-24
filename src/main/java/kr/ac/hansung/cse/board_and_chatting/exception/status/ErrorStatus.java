@@ -1,14 +1,12 @@
 package kr.ac.hansung.cse.board_and_chatting.exception.status;
 
-import kr.ac.hansung.cse.board_and_chatting.exception.BaseErrorCode;
-import kr.ac.hansung.cse.board_and_chatting.exception.ErrorReasonDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum ErrorStatus implements BaseErrorCode {
+public enum ErrorStatus {
 
     // 일반적인 서버 오류
     INTERNAL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "GENERAL_4001", "서버에서 확인할 문제"),
@@ -25,20 +23,4 @@ public enum ErrorStatus implements BaseErrorCode {
     private final String code;
 
     private final String message;
-
-    @Override
-    public ErrorReasonDto getReason() {
-        return ErrorReasonDto.builder()
-                .message(message)
-                .code(code)
-                .build();
-    }
-
-    @Override
-    public ErrorReasonDto getReasonHttpStatus() {
-        return ErrorReasonDto.builder()
-                .message(message)
-                .code(code)
-                .build();
-    }
 }
