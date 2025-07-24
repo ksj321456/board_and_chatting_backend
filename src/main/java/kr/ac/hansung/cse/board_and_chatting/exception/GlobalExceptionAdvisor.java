@@ -1,19 +1,29 @@
 package kr.ac.hansung.cse.board_and_chatting.exception;
 
-import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @ControllerAdvice
 @ResponseBody
+@Slf4j
 public class GlobalExceptionAdvisor {
 
     @ExceptionHandler(SignUpForException.class)
-    public ResponseEntity<ErrorReasonDto> handleSignUpForException(SignUpForException e) {
-        return ErrorReasonDto.toResponseEntity(e.getStatus());
+    public ResponseEntity<ErrorResponse> handleSignUpForException(SignUpForException e) {
+        log.error(String.valueOf(e.getStatus().getStatus()));
+        log.error(e.getStatus().getCode());
+        log.error(e.getStatus().getMessage());
+        return ErrorResponse.toResponseEntity(e.getStatus());
+    }
+
+    @ExceptionHandler(LogInException.class)
+    public ResponseEntity<ErrorResponse> handleLogInException(LogInException e) {
+        log.error(String.valueOf(e.getStatus().getStatus()));
+        log.error(e.getStatus().getCode());
+        log.error(e.getStatus().getMessage());
+        return ErrorResponse.toResponseEntity(e.getStatus());
     }
 }

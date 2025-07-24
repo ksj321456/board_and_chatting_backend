@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -37,6 +39,11 @@ public class User {
     private byte[] userPicture;
 
     private LocalDateTime createdAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     // User -> UserDto 변환 메소드
     public static UserDto toDto(User user) {

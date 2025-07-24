@@ -81,11 +81,23 @@ class BoardAndChattingApplicationTests {
     }
 
     @Test
-    @DisplayName("4. 회원가입 성공 후 Session 저장 테스트")
+    @DisplayName("4. User 객체 저장시 비밀번호 암호화 검사")
+    void createUser4() {
+        User user = User.builder()
+                .userId("hgfdhdf")
+                .password("fdsfdsfsd")
+                .nickname("fdsfsdf")
+                .build();
+        User savedUser = userService.signUpService(User.toDto(user));
+        Assertions.assertNotEquals(user.getPassword(), savedUser.getPassword());
+    }
+
+    @Test
+    @DisplayName("5. 회원가입 성공 후 Session 저장 테스트")
     void testSignUpStoresUserInSession() throws Exception {
         // Given: 유효한 UserDto
         UserDto userDto = UserDto.builder()
-                .userId("test_user01")
+                .userId("test_user02")
                 .password("my_password")
                 .nickname("테스터")
                 .build();

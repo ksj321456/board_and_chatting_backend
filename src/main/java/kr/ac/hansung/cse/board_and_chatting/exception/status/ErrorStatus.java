@@ -13,8 +13,14 @@ public enum ErrorStatus {
 
     // 사용자 인증, 인가 예외
     NOT_SUFFICIENT_DATA_FOR_SIGN_UP(HttpStatus.BAD_REQUEST, "SIGNUP_4001", "회원가입을 위한 필수 정보가 빠져 있습니다."),
-    ALREADY_EXISTS_USER(HttpStatus.BAD_REQUEST, "SIGNUP_4002", "이미 존재하는 회원입니다.")
+    ALREADY_EXISTS_USER(HttpStatus.BAD_REQUEST, "SIGNUP_4002", "이미 존재하는 회원입니다."),
 
+    // 로그인 예외
+    NOT_SUFFICIENT_DATA_FOR_LOG_IN(HttpStatus.BAD_REQUEST, "LOGIN_4001", "로그인을 위한 필수 정보가 빠져 있습니다."),
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "LOGIN_4O02", "비밀번호가 틀렸습니다."),
+    WRONG_USER_ID(HttpStatus.BAD_REQUEST, "LOGIN_4O03", "아이디가 틀렸습니다."),
+    WRONG_BOTH_INFO(HttpStatus.BAD_REQUEST, "LOGIN_4004", "아이디와 비밀번호 모두 틀렸습니다."),
+    NOT_EXISTING_USER(HttpStatus.BAD_REQUEST, "LOGIN_4005", "해당 계정은 존재하지 않습니다.")
 
     ;
 

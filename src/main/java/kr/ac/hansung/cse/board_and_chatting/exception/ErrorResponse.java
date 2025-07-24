@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @AllArgsConstructor
 @Builder
-public class ErrorReasonDto {
+public class ErrorResponse {
 
     private final HttpStatus status;
 
@@ -18,10 +18,10 @@ public class ErrorReasonDto {
 
     private String message;
 
-    public static ResponseEntity<ErrorReasonDto> toResponseEntity(ErrorStatus status) {
+    public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorStatus status) {
         return ResponseEntity
                 .status(status.getStatus())
-                .body(ErrorReasonDto.builder()
+                .body(ErrorResponse.builder()
                         .status(status.getStatus())
                         .code(status.getCode())
                         .message(status.getMessage())
