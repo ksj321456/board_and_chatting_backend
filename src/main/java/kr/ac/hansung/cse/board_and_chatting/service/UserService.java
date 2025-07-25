@@ -3,8 +3,8 @@ package kr.ac.hansung.cse.board_and_chatting.service;
 import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
-import kr.ac.hansung.cse.board_and_chatting.exception.LogInException;
-import kr.ac.hansung.cse.board_and_chatting.exception.SignUpForException;
+import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.LogInException;
+import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,12 +63,6 @@ public class UserService {
         userOptional.orElseThrow(() -> new LogInException(ErrorStatus.NOT_EXISTING_USER));
 
         userOptional.ifPresent(user -> {
-            if (!bCryptPasswordEncoder.matches(userDto.getPassword(), user.getPassword()) && !user.getUserId().equals(userDto.getUserId())) {
-                throw new LogInException(ErrorStatus.WRONG_BOTH_INFO);
-            }
-            if (!user.getUserId().equals(userDto.getUserId())) {
-                throw new LogInException(ErrorStatus.WRONG_USER_ID);
-            }
             if (!bCryptPasswordEncoder.matches(userDto.getPassword(), user.getPassword())) {
                 throw new LogInException(ErrorStatus.WRONG_PASSWORD);
             }

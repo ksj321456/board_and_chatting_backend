@@ -6,14 +6,14 @@ import jakarta.validation.Valid;
 import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.APIResponse;
-import kr.ac.hansung.cse.board_and_chatting.exception.LogInException;
-import kr.ac.hansung.cse.board_and_chatting.exception.SignUpForException;
+import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.LogInException;
+import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForException;
+import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.SuccessStatus;
 import kr.ac.hansung.cse.board_and_chatting.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +33,7 @@ public class UserController {
 
         // 유효성 검사 실패 후 예외 처리
         if (bindingResult.hasErrors()) {
-            throw new SignUpForException(ErrorStatus.NOT_SUFFICIENT_DATA_FOR_SIGN_UP);
+            throw new ValidationException(bindingResult, ErrorStatus.NOT_SUFFICIENT_DATA_FOR_SIGN_UP);
         }
 
         User user = userService.signUpService(userDto);
@@ -59,20 +59,15 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserDto.LoginDto loginDto, BindingResult bindingResult, HttpServletRequest request) {
         log.info(loginDto.toString());
-        User user = null;
-
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            if (bindingResult.hasErrors()) {
-                throw new LogInException(ErrorStatus.NOT_SUFFICIENT_DATA_FOR_LOG_IN);
-            }
-
-            // 로그인 로직 실행
-            user = userService.loginService(loginDto);
-            if (user == null) {
-                throw new LogInException(ErrorStatus.INTERNAL_BAD_REQUEST);
-            }
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult, ErrorStatus.NOT_SUFFICIENT_DATA_FOR_LOG_IN);
         }
+
+        // 로그인 처리
+        User user = userService.loginService(loginDto);
+
+        // 세션 새로 생성
+        HttpSession session = request.getSession(true);  // 없으면 새로 만듦
         session.setAttribute("user", user);
 
         return APIResponse.toResponseEntity(
@@ -80,7 +75,23 @@ public class UserController {
                         .status(SuccessStatus.LOG_IN_SUCCESS.getStatus())
                         .code(SuccessStatus.LOG_IN_SUCCESS.getCode())
                         .message(SuccessStatus.LOG_IN_SUCCESS.getMessage())
-                        .result(loginDto)
+                        .result(loginDto.getUserId())
+                        .build()
+        );
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // 세션 있으면 정상적으로 만료
+        }
+
+        return APIResponse.toResponseEntity(
+                APIResponse.builder()
+                        .status(SuccessStatus.LOG_OUT_SUCCESS.getStatus())
+                        .code(SuccessStatus.LOG_OUT_SUCCESS.getCode())
+                        .message(SuccessStatus.LOG_OUT_SUCCESS.getMessage())
                         .build()
         );
     }

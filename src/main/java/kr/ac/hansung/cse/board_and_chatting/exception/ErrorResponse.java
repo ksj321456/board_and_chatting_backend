@@ -18,6 +18,8 @@ public class ErrorResponse {
 
     private String message;
 
+    private Object result;
+
     public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorStatus status) {
         return ResponseEntity
                 .status(status.getStatus())
@@ -27,5 +29,16 @@ public class ErrorResponse {
                         .message(status.getMessage())
                         .build()
                 );
+    }
+
+    public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorStatus status, Object result) {
+        return ResponseEntity
+                .status(status.getStatus())
+                .body(ErrorResponse.builder()
+                        .status(status.getStatus())
+                        .code(status.getCode())
+                        .message(status.getMessage())
+                        .result(result)
+                        .build());
     }
 }

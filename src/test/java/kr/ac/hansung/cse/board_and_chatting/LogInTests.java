@@ -3,7 +3,7 @@ package kr.ac.hansung.cse.board_and_chatting;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
-import kr.ac.hansung.cse.board_and_chatting.exception.LogInException;
+import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.LogInException;
 import kr.ac.hansung.cse.board_and_chatting.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

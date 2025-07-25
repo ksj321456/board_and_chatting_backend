@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.board_and_chatting.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @Builder
 @AllArgsConstructor
+// NULL인 JSON field는 생략, NULL이 아닌 field와 값들만 응답 JSON으로 전송
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class APIResponse<T> {
 
     private final HttpStatus status;
