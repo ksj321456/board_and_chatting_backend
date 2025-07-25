@@ -1,10 +1,11 @@
 package kr.ac.hansung.cse.board_and_chatting.configuration;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@org.springframework.context.annotation.Configuration
-public class Configuration {
+@Configuration
+public class AppConfig {
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

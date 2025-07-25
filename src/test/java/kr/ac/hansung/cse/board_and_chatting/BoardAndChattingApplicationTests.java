@@ -5,7 +5,7 @@ import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForException;
-import kr.ac.hansung.cse.board_and_chatting.service.UserService;
+import kr.ac.hansung.cse.board_and_chatting.service.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BoardAndChattingApplicationTests {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,7 +46,7 @@ class BoardAndChattingApplicationTests {
                 .nickname("엠피아")
                 .build();
 
-        User savedUser = userService.signUpService(User.toDto(user));
+        User savedUser = userServiceImpl.signUpService(User.toDto(user));
         if (savedUser != null) {
             Assertions.assertEquals(Authority.USER, savedUser.getAuthority());
         }
@@ -62,7 +62,7 @@ class BoardAndChattingApplicationTests {
                 .nickname("엠피아")
                 .build();
 
-        User savedUser = userService.signUpService(User.toDto(user));
+        User savedUser = userServiceImpl.signUpService(User.toDto(user));
         if (savedUser != null) {
             Assertions.assertEquals(Authority.ADMIN, savedUser.getAuthority());
         }
@@ -77,7 +77,7 @@ class BoardAndChattingApplicationTests {
                 .nickname("엠피아")
                 .build();
 
-        Assertions.assertThrows(SignUpForException.class, () -> userService.signUpService(User.toDto(user)));
+        Assertions.assertThrows(SignUpForException.class, () -> userServiceImpl.signUpService(User.toDto(user)));
     }
 
     @Test
@@ -88,7 +88,7 @@ class BoardAndChattingApplicationTests {
                 .password("fdsfdsfsd")
                 .nickname("fdsfsdf")
                 .build();
-        User savedUser = userService.signUpService(User.toDto(user));
+        User savedUser = userServiceImpl.signUpService(User.toDto(user));
         Assertions.assertNotEquals(user.getPassword(), savedUser.getPassword());
     }
 

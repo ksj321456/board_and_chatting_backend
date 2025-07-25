@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.LogInException;
-import kr.ac.hansung.cse.board_and_chatting.service.UserService;
+import kr.ac.hansung.cse.board_and_chatting.service.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 public class LogInTests {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,7 +35,7 @@ public class LogInTests {
                 .password("gfsfgsfd")
                 .build();
 
-        Assertions.assertThrows(LogInException.class, () -> userService.loginService(loginDto));
+        Assertions.assertThrows(LogInException.class, () -> userServiceImpl.loginService(loginDto));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class LogInTests {
                 .userId("fdsfsdfdsfdsfsdf")
                 .password("Gfsgfdgsdfasdfsd")
                 .build();
-        Assertions.assertThrows(LogInException.class, () -> userService.loginService(loginDto));
+        Assertions.assertThrows(LogInException.class, () -> userServiceImpl.loginService(loginDto));
     }
 
     @Test
@@ -55,7 +55,7 @@ public class LogInTests {
                 .userId("fdsfsdfdsfdsfsdf")
                 .password("1234")
                 .build();
-        Assertions.assertThrows(LogInException.class, () -> userService.loginService(loginDto));
+        Assertions.assertThrows(LogInException.class, () -> userServiceImpl.loginService(loginDto));
     }
 
     @Test
@@ -66,6 +66,6 @@ public class LogInTests {
                 .password("1234")
                 .build();
 
-        Assertions.assertInstanceOf(User.class, userService.loginService(loginDto));
+        Assertions.assertInstanceOf(User.class, userServiceImpl.loginService(loginDto));
     }
 }

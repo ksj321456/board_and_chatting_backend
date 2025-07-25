@@ -6,12 +6,11 @@ import jakarta.validation.Valid;
 import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.APIResponse;
-import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.LogInException;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForException;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.SuccessStatus;
-import kr.ac.hansung.cse.board_and_chatting.service.UserService;
+import kr.ac.hansung.cse.board_and_chatting.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @PostMapping("/sign_up")
     public ResponseEntity<?> signUp(@Valid @RequestBody UserDto userDto, BindingResult bindingResult, HttpServletRequest request) {
@@ -36,7 +35,7 @@ public class UserController {
             throw new ValidationException(bindingResult, ErrorStatus.NOT_SUFFICIENT_DATA_FOR_SIGN_UP);
         }
 
-        User user = userService.signUpService(userDto);
+        User user = userServiceImpl.signUpService(userDto);
         // user 객체가 NULL 값을 가질 일은 없지만 만약 갖게 된다면 예외 처리
         if (user == null) {
             throw new SignUpForException(ErrorStatus.INTERNAL_BAD_REQUEST);
@@ -64,7 +63,7 @@ public class UserController {
         }
 
         // 로그인 처리
-        User user = userService.loginService(loginDto);
+        User user = userServiceImpl.loginService(loginDto);
 
         // 세션 새로 생성
         HttpSession session = request.getSession(true);  // 없으면 새로 만듦
