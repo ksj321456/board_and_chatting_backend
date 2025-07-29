@@ -10,6 +10,7 @@ import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForExcept
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.SuccessStatus;
+import kr.ac.hansung.cse.board_and_chatting.service.UserService;
 import kr.ac.hansung.cse.board_and_chatting.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,16 +18,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@RequiredArgsConstructor
+@RequestMapping("/api")
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
+    private UserService userService;
 
-    @PostMapping("/sign_up")
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@Valid @RequestBody UserDto userDto, BindingResult bindingResult, HttpServletRequest request) {
         log.info(userDto.toString());
 
@@ -35,7 +41,7 @@ public class UserController {
             throw new ValidationException(bindingResult, ErrorStatus.NOT_SUFFICIENT_DATA_FOR_SIGN_UP);
         }
 
-        User user = userServiceImpl.signUpService(userDto);
+        User user = userService.signUpService(userDto);
         // user 객체가 NULL 값을 가질 일은 없지만 만약 갖게 된다면 예외 처리
         if (user == null) {
             throw new SignUpForException(ErrorStatus.INTERNAL_BAD_REQUEST);
@@ -63,7 +69,7 @@ public class UserController {
         }
 
         // 로그인 처리
-        User user = userServiceImpl.loginService(loginDto);
+        User user = userService.loginService(loginDto);
 
         // 세션 새로 생성
         HttpSession session = request.getSession(true);  // 없으면 새로 만듦

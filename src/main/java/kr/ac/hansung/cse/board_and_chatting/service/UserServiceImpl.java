@@ -8,6 +8,8 @@ import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForExcept
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.repository.JpaUserRepository;
 import kr.ac.hansung.cse.board_and_chatting.repository.UserRepository;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl extends UserService {
+@Primary
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        super(userRepository, bCryptPasswordEncoder);
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     // 회원가입 진행 서비스 메소드

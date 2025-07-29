@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.board_and_chatting;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class LogoutTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Test
+    @DisplayName("로그아웃 성공")
+    void logout() {
+    }
 
     @Test
     void 로그아웃_성공() throws Exception {

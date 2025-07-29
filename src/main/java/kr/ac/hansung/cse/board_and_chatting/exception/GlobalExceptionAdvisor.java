@@ -1,7 +1,9 @@
 package kr.ac.hansung.cse.board_and_chatting.exception;
 
+import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.GeneralException;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationException;
+import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,7 +38,15 @@ public class GlobalExceptionAdvisor<T> {
                 ))
                 .toList();
 
-        return ErrorResponse.toResponseEntity(e.getErrorStatus(), Map.of("errors", errorList));
+        return ErrorResponse.toResponseEntity(e.getErrorStatus(), errorList);
 
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(AuthenticationException e) {
+        log.error(String.valueOf(e.getErrorStatus().getStatus()));
+        log.error(e.getErrorStatus().getCode());
+        log.error(e.getErrorStatus().getMessage());
+        return ErrorResponse.toResponseEntity(e.getErrorStatus());
     }
 }

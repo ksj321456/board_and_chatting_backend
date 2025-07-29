@@ -18,6 +18,14 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "user_login_id_unique",
+                        columnNames = {"user_login_id"}
+                )
+        }
+)
 public class User {
 
     @Id
@@ -28,7 +36,7 @@ public class User {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false, unique = true, name = "user_login_id")
+    @Column(nullable = false, name = "user_login_id")
     private String userId;
 
     @Column(nullable = false)
@@ -48,15 +56,4 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
-    // User -> UserDto 변환 메소드
-    public static UserDto toDto(User user) {
-        UserDto userDto = UserDto.builder()
-                .nickname(user.getNickname())
-                .userId(user.getUserId())
-                .password(user.getPassword())
-                .authority(user.getAuthority())
-                .userPicture(user.getUserPicture())
-                .build();
-        return userDto;
-    }
 }

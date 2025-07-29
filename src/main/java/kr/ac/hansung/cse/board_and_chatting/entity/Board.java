@@ -14,6 +14,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
+@Table(uniqueConstraints = {
+        @UniqueConstraint(
+                name = "title_constraint",
+                columnNames = {"title"}
+        )
+})
 public class Board {
 
     @Id
@@ -22,10 +28,14 @@ public class Board {
     private Long id;
 
     // 게시글 제목
+    @Column(nullable = false)
     private String title;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Category category;
 
+    @Column(nullable = false)
     private String content;
 
     private LocalDateTime createdAt;
