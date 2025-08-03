@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.ac.hansung.cse.board_and_chatting.dto.BoardDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.response_dto.BoardResponseDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.APIResponse;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -57,5 +60,24 @@ public class BoardController {
                         .message(SuccessStatus.CREATE_ARTICLE_SUCCESS.getMessage())
                         .build()
         );
+    }
+
+    // 게시글 불러오기
+    @GetMapping("/get-articles")
+    public ResponseEntity<?> getArticle(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size
+            ) {
+
+        List<BoardResponseDto.ArticleResponseDto> responseDtoList = boardService.getArticle(page, size);
+
+        APIResponse apiResponse = APIResponse.builder()
+                .status(SuccessStatus.GET_ARTICLES_SUCCESS.getStatus())
+                .code(SuccessStatus.GET_ARTICLES_SUCCESS.getCode())
+                .message(SuccessStatus.GET_ARTICLES_SUCCESS.getMessage())
+                .result(responseDtoList)
+                .build();
+
+        return APIResponse.toResponseEntity(apiResponse);
     }
 }

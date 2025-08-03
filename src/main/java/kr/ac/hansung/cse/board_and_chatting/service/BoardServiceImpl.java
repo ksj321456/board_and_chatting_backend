@@ -1,6 +1,7 @@
 package kr.ac.hansung.cse.board_and_chatting.service;
 
 import kr.ac.hansung.cse.board_and_chatting.dto.BoardDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.response_dto.BoardResponseDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
@@ -10,8 +11,15 @@ import kr.ac.hansung.cse.board_and_chatting.repository.BoardRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Primary
@@ -38,5 +46,25 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return boardRepository.save(board);
+    }
+
+    public List<BoardResponseDto.ArticleResponseDto> getArticle(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Board> boards = boardRepository.findAll(pageable);
+        List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
+
+        boards.forEach(board -> {
+            BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .category(board.getCategory())
+                    .author(board.getUser().getNickname())
+                    .createdAt(board.getCreatedAt())
+                    .updatedAt(board.getUpdatedAt())
+                    .build();
+            articles.add(articleResponseDto);
+        });
+
+        return articles;
     }
 }

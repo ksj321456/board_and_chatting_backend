@@ -19,7 +19,10 @@ public enum SuccessStatus {
     LOG_OUT_SUCCESS(HttpStatus.OK, "LOG_OUT_SUCCESS", "로그아웃에 성공했습니다."),
 
     // 게시글 등록 성공 메시지
-    CREATE_ARTICLE_SUCCESS(HttpStatus.OK, "CREATE_ARTICLE_SUCCESS", "게시판 글 작성에 성공했습니다.")
+    CREATE_ARTICLE_SUCCESS(HttpStatus.CREATED, "CREATE_ARTICLE_SUCCESS", "게시판 글 작성에 성공했습니다."),
+
+    // 게시글 불러오기 성공
+    GET_ARTICLES_SUCCESS(HttpStatus.OK, "GET_ARTICLES_SUCCESS", "게시판 글 불러오기에 성공했습니다.")
 
     ;
 

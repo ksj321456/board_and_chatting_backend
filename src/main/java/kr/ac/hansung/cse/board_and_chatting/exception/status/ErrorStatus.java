@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorStatus {
 
     // 일반적인 서버 오류
-    INTERNAL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "GENERAL_4001", "서버에서 확인할 문제"),
-    NO_AUTHENTICATION(HttpStatus.BAD_REQUEST, "GENERAL_4002", "먼저 로그인 및 회원가입을 해야합니다."),
+    INTERNAL_BAD_REQUEST(HttpStatus.INTERNAL_SERVER_ERROR, "GENERAL_500", "서버에서 확인할 문제"),
+    NO_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "GENERAL_401", "먼저 로그인 및 회원가입을 해야합니다."),
 
     // 사용자 인증, 인가 예외
     NOT_SUFFICIENT_DATA_FOR_SIGN_UP(HttpStatus.BAD_REQUEST, "SIGNUP_4001", "회원가입을 위한 필수 정보가 빠져 있습니다."),
