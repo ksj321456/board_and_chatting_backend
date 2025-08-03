@@ -49,8 +49,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     public List<BoardResponseDto.ArticleResponseDto> getArticle(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        List<Board> boards = boardRepository.findAllWithUser(pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> boards = boardRepository.findAllWithUser(pageable);
+        long total = boards.getTotalElements();
+        boolean isFirst = boards.isFirst();
+        boolean isLast = boards.isLast();
         List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
 
         boards.forEach(board -> {
@@ -59,6 +62,9 @@ public class BoardServiceImpl implements BoardService {
                     .content(board.getContent())
                     .category(board.getCategory())
                     .author(board.getUser().getNickname())
+                    .totalPages(total)
+                    .isFirst(isFirst)
+                    .isLast(isLast)
                     .createdAt(board.getCreatedAt())
                     .updatedAt(board.getUpdatedAt())
                     .build();

@@ -49,7 +49,7 @@ public class GetArticlesTest {
         Optional<User> userOptional = userRepository.findByUserId("root");
         User user = userOptional.orElse(null);
 
-        List<Board> boards = boardRepository.findAllWithUser(PageRequest.of(0, 10, Sort.by("createdAt").descending()));
+        Page<Board> boards = boardRepository.findAllWithUser(PageRequest.of(0, 10, Sort.by("createdAt").descending()));
         Assertions.assertNotNull(boards);
     }
 

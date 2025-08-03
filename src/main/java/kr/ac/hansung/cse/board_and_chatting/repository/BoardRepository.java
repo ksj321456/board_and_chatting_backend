@@ -12,5 +12,5 @@ public interface BoardRepository {
 
     Board findBoardById(Long boardId);
 
-    List<Board> findAllWithUser(Pageable pageable);
+    Page<Board> findAllWithUser(Pageable pageable);
 }

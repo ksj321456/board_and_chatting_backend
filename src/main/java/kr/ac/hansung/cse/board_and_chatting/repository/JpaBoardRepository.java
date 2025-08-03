@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface JpaBoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findBoardById(Long boardId);
 
-    @Query("SELECT b FROM Board b JOIN FETCH b.user ORDER BY b.createdAt DESC")
-    List<Board> findAllWithUser(Pageable pageable);
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.user ORDER BY b.createdAt DESC",
+    countQuery = "SELECT COUNT(b) FROM Board b"
+    )
+    Page<Board> findAllWithUser(Pageable pageable);
 }
