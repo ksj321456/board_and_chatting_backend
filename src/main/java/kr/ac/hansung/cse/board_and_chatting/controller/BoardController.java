@@ -81,13 +81,13 @@ public class BoardController {
 
         int page = getArticleRequestParameters.getPage();
         int size = getArticleRequestParameters.getSize();
-        List<BoardResponseDto.ArticleResponseDto> responseDtoList = boardService.getArticle(page, size);
+        BoardResponseDto.GeneralArticlesResponseDto generalArticlesResponseDto = boardService.getArticle(page, size);
 
         APIResponse apiResponse = APIResponse.builder()
                 .status(SuccessStatus.GET_ARTICLES_SUCCESS.getStatus())
                 .code(SuccessStatus.GET_ARTICLES_SUCCESS.getCode())
                 .message(SuccessStatus.GET_ARTICLES_SUCCESS.getMessage())
-                .result(responseDtoList)
+                .result(generalArticlesResponseDto)
                 .build();
 
         return APIResponse.toResponseEntity(apiResponse);

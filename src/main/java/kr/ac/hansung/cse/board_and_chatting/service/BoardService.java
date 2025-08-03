@@ -13,5 +13,5 @@ public interface BoardService {
     // 실제 기능 메서드만 정의합니다.
     Board saveArticle(BoardDto.CreateArticleRequest createArticleRequest, User user);
 
-    List<BoardResponseDto.ArticleResponseDto> getArticle(int page, int size);
+    BoardResponseDto.GeneralArticlesResponseDto getArticle(int page, int size);
 }

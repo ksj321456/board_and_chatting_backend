@@ -7,8 +7,18 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class BoardResponseDto {
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class GeneralArticlesResponseDto {
+        private Long totalPages;
+
+        private List<ArticleResponseDto> articles;
+    }
 
     @Getter
     @AllArgsConstructor
@@ -23,15 +33,6 @@ public class BoardResponseDto {
 
         // 작성자 이름
         private String author;
-
-        // 전체 페이지 갯수
-        private Long totalPages;
-
-        // 첫 페이지인가?
-        private boolean isFirst;
-
-        // 마지막 페이지인지?
-        private boolean isLast;
 
         private LocalDateTime createdAt;
 
