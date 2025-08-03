@@ -1,9 +1,6 @@
-package kr.ac.hansung.cse.board_and_chatting.dto;
+package kr.ac.hansung.cse.board_and_chatting.dto.request_dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import kr.ac.hansung.cse.board_and_chatting.entity.User;
-import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import lombok.*;
 
 @Getter

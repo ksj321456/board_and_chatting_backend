@@ -1,20 +1,17 @@
-package kr.ac.hansung.cse.board_and_chatting.service;
+package kr.ac.hansung.cse.board_and_chatting.service.board_service;
 
-import kr.ac.hansung.cse.board_and_chatting.dto.BoardDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.BoardRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.dto.response_dto.BoardResponseDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
-import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.CreateArticleException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
-import kr.ac.hansung.cse.board_and_chatting.repository.BoardRepository;
+import kr.ac.hansung.cse.board_and_chatting.repository.board_repository.BoardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +24,13 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
 
+    @Autowired
     public BoardServiceImpl(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
     }
 
     @Transactional
-    public Board saveArticle(BoardDto.CreateArticleRequest createArticleRequest, User user) {
+    public Board saveArticle(BoardRequestDto.CreateArticleRequest createArticleRequest, User user) {
         Board board = Board.builder()
                 .title(createArticleRequest.getTitle())
                 .category(createArticleRequest.getCategory())

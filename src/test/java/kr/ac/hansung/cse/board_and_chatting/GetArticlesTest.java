@@ -2,10 +2,8 @@ package kr.ac.hansung.cse.board_and_chatting;
 
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
-import kr.ac.hansung.cse.board_and_chatting.repository.BoardRepository;
-import kr.ac.hansung.cse.board_and_chatting.repository.UserRepository;
-import kr.ac.hansung.cse.board_and_chatting.service.BoardService;
-import kr.ac.hansung.cse.board_and_chatting.service.UserService;
+import kr.ac.hansung.cse.board_and_chatting.repository.board_repository.BoardRepository;
+import kr.ac.hansung.cse.board_and_chatting.repository.user_repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,12 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

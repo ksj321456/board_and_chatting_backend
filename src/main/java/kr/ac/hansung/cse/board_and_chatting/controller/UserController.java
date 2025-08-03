@@ -3,17 +3,16 @@ package kr.ac.hansung.cse.board_and_chatting.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.APIResponse;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForException;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.SuccessStatus;
-import kr.ac.hansung.cse.board_and_chatting.service.UserService;
-import kr.ac.hansung.cse.board_and_chatting.service.UserServiceImpl;
-import lombok.RequiredArgsConstructor;
+import kr.ac.hansung.cse.board_and_chatting.service.user_service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +27,7 @@ public class UserController {
 
     private UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }

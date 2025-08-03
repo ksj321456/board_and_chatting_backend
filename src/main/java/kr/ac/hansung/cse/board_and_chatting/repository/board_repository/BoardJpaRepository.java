@@ -1,19 +1,15 @@
-package kr.ac.hansung.cse.board_and_chatting.repository;
+package kr.ac.hansung.cse.board_and_chatting.repository.board_repository;
 
-import jakarta.annotation.PostConstruct;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
-import kr.ac.hansung.cse.board_and_chatting.entity.enums.Category;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,6 +18,7 @@ public class BoardJpaRepository implements BoardRepository {
 
     private final JpaBoardRepository boardRepository;
 
+    @Autowired
     public BoardJpaRepository(JpaBoardRepository boardRepository) {
         this.boardRepository = boardRepository;
     }

@@ -3,7 +3,7 @@ package kr.ac.hansung.cse.board_and_chatting.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import kr.ac.hansung.cse.board_and_chatting.dto.BoardDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.BoardRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.dto.response_dto.BoardResponseDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
@@ -12,15 +12,11 @@ import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationE
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.SuccessStatus;
-import kr.ac.hansung.cse.board_and_chatting.service.BoardService;
-import lombok.RequiredArgsConstructor;
+import kr.ac.hansung.cse.board_and_chatting.service.board_service.BoardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -28,13 +24,14 @@ public class BoardController {
 
     private BoardService boardService;
 
+    @Autowired
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
 
     // 게시글 작성 로직
     @PostMapping("/create-article")
-    public ResponseEntity<?> createArticle(@Valid @RequestBody BoardDto.CreateArticleRequest createArticleRequest,
+    public ResponseEntity<?> createArticle(@Valid @RequestBody BoardRequestDto.CreateArticleRequest createArticleRequest,
                                            BindingResult bindingResult,
                                                      HttpServletRequest request
                                                      ) {
@@ -65,7 +62,7 @@ public class BoardController {
     // 게시글 불러오기
     @GetMapping("/get-articles")
     public ResponseEntity<?> getArticle(
-            @Valid @ModelAttribute BoardDto.GetArticleRequestParameters getArticleRequestParameters,
+            @Valid @ModelAttribute BoardRequestDto.GetArticleRequestParameters getArticleRequestParameters,
             BindingResult bindingResult,
             HttpServletRequest request
             ) {

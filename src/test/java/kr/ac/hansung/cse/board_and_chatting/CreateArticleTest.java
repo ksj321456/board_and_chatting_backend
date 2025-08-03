@@ -1,34 +1,24 @@
 package kr.ac.hansung.cse.board_and_chatting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.ac.hansung.cse.board_and_chatting.dto.BoardDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.BoardRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Category;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
-import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.CreateArticleException;
-import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationException;
-import kr.ac.hansung.cse.board_and_chatting.repository.UserRepository;
-import kr.ac.hansung.cse.board_and_chatting.service.BoardService;
-import kr.ac.hansung.cse.board_and_chatting.service.BoardServiceImpl;
+import kr.ac.hansung.cse.board_and_chatting.repository.user_repository.UserRepository;
+import kr.ac.hansung.cse.board_and_chatting.service.board_service.BoardService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -67,7 +57,7 @@ public class CreateArticleTest {
 
         user = userRepository.save(user);
 
-        BoardDto.CreateArticleRequest createArticleRequest = BoardDto.CreateArticleRequest.builder()
+        BoardRequestDto.CreateArticleRequest createArticleRequest = BoardRequestDto.CreateArticleRequest.builder()
                 .title("제목1")
                 .content("내용1")
                 .category(Category.FREE)
@@ -82,7 +72,7 @@ public class CreateArticleTest {
         User user = userRepository.findByUserId("root").get();
         System.out.println(user);
 
-        BoardDto.CreateArticleRequest createArticleRequest = BoardDto.CreateArticleRequest.builder()
+        BoardRequestDto.CreateArticleRequest createArticleRequest = BoardRequestDto.CreateArticleRequest.builder()
                 .title("제목1")
                 .content("내용1")
                 .category(Category.FREE)

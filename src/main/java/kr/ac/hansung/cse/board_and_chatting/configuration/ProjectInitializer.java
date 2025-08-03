@@ -4,16 +4,14 @@ import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Category;
-import kr.ac.hansung.cse.board_and_chatting.repository.BoardJpaRepository;
-import kr.ac.hansung.cse.board_and_chatting.repository.UserJpaRepository;
+import kr.ac.hansung.cse.board_and_chatting.repository.board_repository.BoardJpaRepository;
+import kr.ac.hansung.cse.board_and_chatting.repository.user_repository.UserJpaRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 //@Component
 public class ProjectInitializer {

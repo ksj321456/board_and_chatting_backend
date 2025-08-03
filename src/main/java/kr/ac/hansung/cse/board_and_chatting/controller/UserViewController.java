@@ -1,20 +1,11 @@
 package kr.ac.hansung.cse.board_and_chatting.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
-import kr.ac.hansung.cse.board_and_chatting.exception.APIResponse;
-import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForException;
-import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationException;
-import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
-import kr.ac.hansung.cse.board_and_chatting.exception.status.SuccessStatus;
-import kr.ac.hansung.cse.board_and_chatting.service.UserServiceImpl;
-import lombok.Getter;
+import kr.ac.hansung.cse.board_and_chatting.service.user_service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

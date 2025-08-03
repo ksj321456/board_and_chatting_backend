@@ -1,16 +1,15 @@
-package kr.ac.hansung.cse.board_and_chatting.dto;
+package kr.ac.hansung.cse.board_and_chatting.dto.request_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-public class BoardDto {
+public class BoardRequestDto {
 
     @Getter
     @AllArgsConstructor

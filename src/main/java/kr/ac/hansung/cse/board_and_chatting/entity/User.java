@@ -1,16 +1,10 @@
 package kr.ac.hansung.cse.board_and_chatting.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

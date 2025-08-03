@@ -1,15 +1,14 @@
-package kr.ac.hansung.cse.board_and_chatting.service;
+package kr.ac.hansung.cse.board_and_chatting.service.user_service;
 
-import kr.ac.hansung.cse.board_and_chatting.dto.UserDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.LogInException;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
-import kr.ac.hansung.cse.board_and_chatting.repository.JpaUserRepository;
-import kr.ac.hansung.cse.board_and_chatting.repository.UserRepository;
+import kr.ac.hansung.cse.board_and_chatting.repository.user_repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +22,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;

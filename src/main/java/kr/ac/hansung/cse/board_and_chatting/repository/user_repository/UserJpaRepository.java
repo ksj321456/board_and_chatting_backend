@@ -1,10 +1,8 @@
-package kr.ac.hansung.cse.board_and_chatting.repository;
+package kr.ac.hansung.cse.board_and_chatting.repository.user_repository;
 
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -16,6 +14,7 @@ public class UserJpaRepository implements UserRepository {
 
     private final JpaUserRepository userRepository;
 
+    @Autowired
     public UserJpaRepository(JpaUserRepository userRepository) {
         this.userRepository = userRepository;
     }
