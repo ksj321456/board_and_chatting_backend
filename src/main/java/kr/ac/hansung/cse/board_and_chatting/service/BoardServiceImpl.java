@@ -50,7 +50,7 @@ public class BoardServiceImpl implements BoardService {
 
     public List<BoardResponseDto.ArticleResponseDto> getArticle(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<Board> boards = boardRepository.findAll(pageable);
+        List<Board> boards = boardRepository.findAllWithUser(pageable);
         List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
 
         boards.forEach(board -> {
