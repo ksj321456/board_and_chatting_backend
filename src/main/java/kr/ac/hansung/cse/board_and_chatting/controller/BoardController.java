@@ -65,10 +65,22 @@ public class BoardController {
     // 게시글 불러오기
     @GetMapping("/get-articles")
     public ResponseEntity<?> getArticle(
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "size") int size
+            @Valid @ModelAttribute BoardDto.GetArticleRequestParameters getArticleRequestParameters,
+            BindingResult bindingResult,
+            HttpServletRequest request
             ) {
 
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            throw new AuthenticationException(ErrorStatus.NO_AUTHENTICATION);
+        }
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult, ErrorStatus.MISSING_REQUIRED_PARAMETERS);
+        }
+
+        int page = getArticleRequestParameters.getPage();
+        int size = getArticleRequestParameters.getSize();
         List<BoardResponseDto.ArticleResponseDto> responseDtoList = boardService.getArticle(page, size);
 
         APIResponse apiResponse = APIResponse.builder()

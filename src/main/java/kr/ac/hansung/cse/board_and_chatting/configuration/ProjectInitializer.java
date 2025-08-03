@@ -1,37 +1,46 @@
 package kr.ac.hansung.cse.board_and_chatting.configuration;
 
-import jakarta.annotation.PostConstruct;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
+import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Category;
 import kr.ac.hansung.cse.board_and_chatting.repository.BoardJpaRepository;
 import kr.ac.hansung.cse.board_and_chatting.repository.UserJpaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-@Component
-public class BoardInitializer {
+//@Component
+public class ProjectInitializer {
 
     private BoardJpaRepository boardJpaRepository;
     private UserJpaRepository userJpaRepository;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public BoardInitializer(BoardJpaRepository boardJpaRepository, UserJpaRepository userJpaRepository) {
+    public ProjectInitializer(BoardJpaRepository boardJpaRepository, UserJpaRepository userJpaRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.boardJpaRepository = boardJpaRepository;
         this.userJpaRepository = userJpaRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
-    // Board 더미 데이터 생성 메소드
     public void init() {
-        Optional<User> userOptional = userJpaRepository.findByUserId("root");
-        User user = userOptional.orElseThrow(() -> new NullPointerException("BoardInitializer Bean 생성 중 User NPE 예외 발생"));
+        User user = User.builder()
+                .nickname("관리자")
+                .userId("root")
+                .password(bCryptPasswordEncoder.encode("1234"))
+                .authority(Authority.ADMIN)
+                .createdAt(LocalDateTime.now())
+                .build();
+        userJpaRepository.save(user);
+
+
         for (int i = 0; i < 3000; i++) {
             Board board = Board.builder()
                     .title("제목 " + i)
