@@ -13,6 +13,7 @@ import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationExcep
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.SuccessStatus;
 import kr.ac.hansung.cse.board_and_chatting.service.board_service.BoardService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class BoardController {
 
     private BoardService boardService;
@@ -62,23 +64,66 @@ public class BoardController {
     // 게시글 불러오기
     @GetMapping("/get-articles")
     public ResponseEntity<?> getArticle(
+            // 쿼리 파라미터 -> DTO 변환 => 유효성 검사 가능
             @Valid @ModelAttribute BoardRequestDto.GetArticleRequestParameters getArticleRequestParameters,
             BindingResult bindingResult,
             HttpServletRequest request
             ) {
 
         HttpSession session = request.getSession();
+        // 인증/인가 작업 예외 처리
         if (session.getAttribute("user") == null) {
             throw new AuthenticationException(ErrorStatus.NO_AUTHENTICATION);
         }
 
+        // 유효성 검사 예외 처리
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult, ErrorStatus.MISSING_REQUIRED_PARAMETERS);
         }
 
+        log.info("Client IP Address: " + request.getRemoteAddr());
+
+        // 페이징 처리 시 사용할 파라미터
         int page = getArticleRequestParameters.getPage();
         int size = getArticleRequestParameters.getSize();
+
+        // 응답 시 넘겨줄 객체 생성
         BoardResponseDto.GeneralArticlesResponseDto generalArticlesResponseDto = boardService.getArticle(page, size);
+
+        APIResponse apiResponse = APIResponse.builder()
+                .status(SuccessStatus.GET_ARTICLES_SUCCESS.getStatus())
+                .code(SuccessStatus.GET_ARTICLES_SUCCESS.getCode())
+                .message(SuccessStatus.GET_ARTICLES_SUCCESS.getMessage())
+                .result(generalArticlesResponseDto)
+                .build();
+
+        return APIResponse.toResponseEntity(apiResponse);
+    }
+
+    @GetMapping("/get-article-with-title")
+    public ResponseEntity<?> getArticleWithTitle(
+            @Valid @ModelAttribute BoardRequestDto.GetArticleWithTitleRequestParameters getArticleWithTitleRequestParameters,
+            BindingResult bindingResult,
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession();
+        // 인증/인가 작업 예외 처리
+        if (session.getAttribute("user") == null) {
+            throw new AuthenticationException(ErrorStatus.NO_AUTHENTICATION);
+        }
+
+        // 유효성 검사 예외 처리
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult, ErrorStatus.MISSING_REQUIRED_PARAMETERS);
+        }
+        log.info("Client IP Address: " + request.getRemoteAddr());
+
+        String title = getArticleWithTitleRequestParameters.getTitle();
+        int page = getArticleWithTitleRequestParameters.getPage();
+        int size = getArticleWithTitleRequestParameters.getSize();
+
+        // 응답 시 넘겨줄 객체 생성
+        BoardResponseDto.GeneralArticlesResponseDto generalArticlesResponseDto = boardService.getArticlesWithTitle(title, page, size);
 
         APIResponse apiResponse = APIResponse.builder()
                 .status(SuccessStatus.GET_ARTICLES_SUCCESS.getStatus())

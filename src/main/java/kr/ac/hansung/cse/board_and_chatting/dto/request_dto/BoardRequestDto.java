@@ -40,4 +40,20 @@ public class BoardRequestDto {
         @Min(value = 1, message = "size 파라미터의 값은 1 이상이어야 합니다.")
         private Integer size;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class GetArticleWithTitleRequestParameters {
+        @NotNull(message = "page 파라미터는 필수입니다.")
+        @Min(value = 0, message = "page 파라미터의 값은 0 이상이어야 합니다.")
+        private Integer page;
+
+        @NotNull(message = "size 파라미터는 필수입니다.")
+        @Min(value = 1, message = "size 파라미터의 값은 1 이상이어야 합니다.")
+        private Integer size;
+
+        @NotBlank(message = "title 파라미터는 필수입니다.")
+        private String title;
+    }
 }

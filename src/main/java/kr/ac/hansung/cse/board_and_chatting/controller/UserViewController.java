@@ -2,7 +2,8 @@ package kr.ac.hansung.cse.board_and_chatting.controller;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserRequestDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.service.user_service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +29,12 @@ public class UserViewController {
 
     @GetMapping("/signup")
     public String signupForm(Model model) {
-        model.addAttribute("userDto", new UserDto());
+        model.addAttribute("userDto", new UserRequestDto());
         return "signup"; // templates/signup.html
     }
 
     @PostMapping("/signup")
-    public String signupSubmit(@ModelAttribute("userDto") @Valid UserDto userDto,
+    public String signupSubmit(@ModelAttribute("userDto") @Valid UserRequestDto userDto,
                                BindingResult bindingResult,
                                @RequestParam(value = "pictureFile", required = false) MultipartFile pictureFile,
                                HttpSession session,
@@ -63,7 +64,7 @@ public class UserViewController {
                               HttpSession session,
                               Model model) {
 
-        var loginDto = new UserDto.LoginDto(userId, password);
+        var loginDto = new UserRequestDto.LoginDto(userId, password);
         User user = userServiceImpl.loginService(loginDto);
 
         if (user == null) {

@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class UserRequestDto {
 
     @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
     private String nickname;

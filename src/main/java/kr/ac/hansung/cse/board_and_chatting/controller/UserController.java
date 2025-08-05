@@ -3,7 +3,8 @@ package kr.ac.hansung.cse.board_and_chatting.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserRequestDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.APIResponse;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.SignUpForException;
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@Valid @RequestBody UserDto userDto, BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity<?> signUp(@Valid @RequestBody UserRequestDto userDto, BindingResult bindingResult, HttpServletRequest request) {
         log.info(userDto.toString());
 
         // 유효성 검사 실패 후 예외 처리
@@ -62,7 +63,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody UserDto.LoginDto loginDto, BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody UserRequestDto.LoginDto loginDto, BindingResult bindingResult, HttpServletRequest request) {
         log.info(loginDto.toString());
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult, ErrorStatus.NOT_SUFFICIENT_DATA_FOR_LOG_IN);

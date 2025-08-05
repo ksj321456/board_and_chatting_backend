@@ -1,7 +1,8 @@
 package kr.ac.hansung.cse.board_and_chatting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserRequestDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.LogInException;
 import kr.ac.hansung.cse.board_and_chatting.service.user_service.UserServiceImpl;
@@ -30,7 +31,7 @@ public class LogInTests {
     @Test
     @DisplayName("1. 로그인 실패 로직(비밀번호 틀림)")
     void logInFail_01() {
-        UserDto.LoginDto loginDto = UserDto.LoginDto.builder()
+        UserRequestDto.LoginDto loginDto = UserRequestDto.LoginDto.builder()
                 .userId("hong123")
                 .password("gfsfgsfd")
                 .build();
@@ -41,7 +42,7 @@ public class LogInTests {
     @Test
     @DisplayName("2. 로그인 실패 로직(아이디, 비밀번호 모두 틀림)")
     void logInFail_02() {
-        UserDto.LoginDto loginDto = UserDto.LoginDto.builder()
+        UserRequestDto.LoginDto loginDto = UserRequestDto.LoginDto.builder()
                 .userId("fdsfsdfdsfdsfsdf")
                 .password("Gfsgfdgsdfasdfsd")
                 .build();
@@ -51,7 +52,7 @@ public class LogInTests {
     @Test
     @DisplayName("3. 로그인 실패 로직(아이디 틀림")
     void logInFail_03() {
-        UserDto.LoginDto loginDto = UserDto.LoginDto.builder()
+        UserRequestDto.LoginDto loginDto = UserRequestDto.LoginDto.builder()
                 .userId("fdsfsdfdsfdsfsdf")
                 .password("1234")
                 .build();
@@ -61,7 +62,7 @@ public class LogInTests {
     @Test
     @DisplayName("4. 로그인 성공")
     void logInSuccess() {
-        UserDto.LoginDto loginDto = UserDto.LoginDto.builder()
+        UserRequestDto.LoginDto loginDto = UserRequestDto.LoginDto.builder()
                 .userId("root")
                 .password("1234")
                 .build();

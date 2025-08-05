@@ -1,6 +1,6 @@
 package kr.ac.hansung.cse.board_and_chatting.service.user_service;
 
-import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.UserRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.LogInException;
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     // 회원가입 진행 서비스 메소드
     @Transactional
-    public User signUpService(UserDto userDto) {
+    public User signUpService(UserRequestDto userDto) {
         Optional<User> userOptional = userRepository.findByUserId(userDto.getUserId());
 
         // 이미 존재하는 회원일 경우 예외처리
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public User loginService(UserDto.LoginDto userDto) {
+    public User loginService(UserRequestDto.LoginDto userDto) {
         Optional<User> userOptional = userRepository.findByUserId(userDto.getUserId());
 
         // DB에 해당 User 정보가 없다면 예외처리

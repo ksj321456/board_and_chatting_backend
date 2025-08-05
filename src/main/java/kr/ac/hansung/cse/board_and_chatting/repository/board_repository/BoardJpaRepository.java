@@ -47,4 +47,9 @@ public class BoardJpaRepository implements BoardRepository {
     public Page<Board> findAllWithUser(Pageable pageable) {
         return boardRepository.findAllWithUser(pageable);
     }
+
+    @Override
+    public Page<Board> findAllByTitleCustom(String title, Pageable pageable) {
+        return boardRepository.findAllByTitleCustom(title, pageable);
+    }
 }

@@ -12,4 +12,6 @@ public interface BoardService {
     Board saveArticle(BoardRequestDto.CreateArticleRequest createArticleRequest, User user);
 
     BoardResponseDto.GeneralArticlesResponseDto getArticle(int page, int size);
+
+    BoardResponseDto.GeneralArticlesResponseDto getArticlesWithTitle(String title, int page, int size);
 }

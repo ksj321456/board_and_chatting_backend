@@ -72,4 +72,31 @@ public class BoardServiceImpl implements BoardService {
 
         return generalArticlesResponseDto;
     }
+
+    @Override
+    public BoardResponseDto.GeneralArticlesResponseDto getArticlesWithTitle(String title, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> boards = boardRepository.findAllByTitleCustom(title, pageable);
+        long totalPages = boards.getTotalElements();
+
+        List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
+        boards.forEach(board -> {
+            BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .category(board.getCategory())
+                    .author(board.getUser().getNickname())
+                    .createdAt(board.getCreatedAt())
+                    .updatedAt(board.getUpdatedAt())
+                    .build();
+            articles.add(articleResponseDto);
+        });
+        BoardResponseDto.GeneralArticlesResponseDto generalArticlesResponseDto = BoardResponseDto.GeneralArticlesResponseDto
+                .builder()
+                .totalPages(totalPages)
+                .articles(articles)
+                .build();
+
+        return generalArticlesResponseDto;
+    }
 }
