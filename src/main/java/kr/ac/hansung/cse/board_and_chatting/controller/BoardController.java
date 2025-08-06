@@ -82,6 +82,7 @@ public class BoardController {
         }
 
         log.info("Client IP Address: " + request.getRemoteAddr());
+        long startTime = System.currentTimeMillis();
 
         // 페이징 처리 시 사용할 파라미터
         int page = getArticleRequestParameters.getPage();
@@ -97,11 +98,16 @@ public class BoardController {
                 .result(generalArticlesResponseDto)
                 .build();
 
+        long endTime = System.currentTimeMillis();
+        log.info("Take time: " + (endTime - startTime) + "ms");
+
         return APIResponse.toResponseEntity(apiResponse);
     }
 
+    // 제목 검색 기능
     @GetMapping("/get-article-with-title")
     public ResponseEntity<?> getArticleWithTitle(
+            // 파라미터로 page, size, title받음.
             @Valid @ModelAttribute BoardRequestDto.GetArticleWithTitleRequestParameters getArticleWithTitleRequestParameters,
             BindingResult bindingResult,
             HttpServletRequest request
@@ -116,6 +122,7 @@ public class BoardController {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult, ErrorStatus.MISSING_REQUIRED_PARAMETERS);
         }
+        long startTime = System.currentTimeMillis();
         log.info("Client IP Address: " + request.getRemoteAddr());
 
         String title = getArticleWithTitleRequestParameters.getTitle();
@@ -131,6 +138,8 @@ public class BoardController {
                 .message(SuccessStatus.GET_ARTICLES_SUCCESS.getMessage())
                 .result(generalArticlesResponseDto)
                 .build();
+        long endTime = System.currentTimeMillis();
+        log.info("Total time taken: " + (endTime - startTime) + "ms");
 
         return APIResponse.toResponseEntity(apiResponse);
     }

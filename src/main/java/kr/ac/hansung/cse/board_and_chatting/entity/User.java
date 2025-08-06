@@ -5,6 +5,8 @@ import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -42,6 +44,10 @@ public class User {
 
     @Lob
     private byte[] userPicture;
+
+    // 부모인 User 삭제 시, 자식도 함께 삭제
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    List<Board> boards = new ArrayList<>();
 
     private LocalDateTime createdAt;
 

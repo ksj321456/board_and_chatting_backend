@@ -49,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
     public BoardResponseDto.GeneralArticlesResponseDto getArticle(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boards = boardRepository.findAllWithUser(pageable);
-        long totalPages = boards.getTotalElements();
+        long totalPages = boards.getTotalPages();
         List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
 
         boards.forEach(board -> {
@@ -77,7 +77,7 @@ public class BoardServiceImpl implements BoardService {
     public BoardResponseDto.GeneralArticlesResponseDto getArticlesWithTitle(String title, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boards = boardRepository.findAllByTitleCustom(title, pageable);
-        long totalPages = boards.getTotalElements();
+        long totalPages = boards.getTotalPages();
 
         List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
         boards.forEach(board -> {
