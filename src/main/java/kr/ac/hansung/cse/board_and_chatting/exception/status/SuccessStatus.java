@@ -22,7 +22,10 @@ public enum SuccessStatus {
     CREATE_ARTICLE_SUCCESS(HttpStatus.CREATED, "CREATE_ARTICLE_SUCCESS", "게시판 글 작성에 성공했습니다."),
 
     // 게시글 불러오기 성공
-    GET_ARTICLES_SUCCESS(HttpStatus.OK, "GET_ARTICLES_SUCCESS", "게시판 글 불러오기에 성공했습니다.")
+    GET_ARTICLES_SUCCESS(HttpStatus.OK, "GET_ARTICLES_SUCCESS", "게시판 글 불러오기에 성공했습니다."),
+
+    // 한 개의 게시글 불러오기 성공
+    GET_ARTICLE_SUCCESS(HttpStatus.OK, "GET_ONE_ARTICLE_SUCCESS", "게시판에서 선택한 글 불러오기에 성공했습니다.")
 
     ;
 

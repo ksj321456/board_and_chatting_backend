@@ -38,4 +38,27 @@ public class BoardResponseDto {
 
         private LocalDateTime updatedAt;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class OneArticleResponseDto {
+        private String title;
+
+        private String content;
+
+        private Category category;
+
+        private String author;
+
+        // 수정할 수 있는가? => 즉, 권한이 있는가?
+        private boolean canUpdate;
+
+        // 삭제할 수 있는가? => 즉, 권한이 있는가?
+        private boolean canDelete;
+
+        private LocalDateTime createdAt;
+
+        private LocalDateTime updatedAt;
+    }
 }

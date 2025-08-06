@@ -2,7 +2,9 @@ package kr.ac.hansung.cse.board_and_chatting.repository.board_repository;
 
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
+import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ServerInternalException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 @Repository
 @Primary
+@Slf4j
 public class BoardJpaRepository implements BoardRepository {
 
     private final JpaBoardRepository boardRepository;
@@ -51,5 +54,12 @@ public class BoardJpaRepository implements BoardRepository {
     @Override
     public Page<Board> findAllByTitleCustom(String title, Pageable pageable) {
         return boardRepository.findAllByTitleCustom(title, pageable);
+    }
+
+    @Override
+    public Board findBoardByIdCustom(Long boardId) {
+        Optional<Board> boardOptional = boardRepository.findBoardByIdCustom(boardId);
+        log.info("Repository Layer: findBoardByIdCustom is exist => " + boardOptional.isPresent());
+        return boardOptional.orElseThrow(() -> new ServerInternalException(ErrorStatus.INTERNAL_BAD_REQUEST));
     }
 }

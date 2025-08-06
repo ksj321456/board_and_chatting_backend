@@ -7,6 +7,7 @@ import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.BoardRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.dto.response_dto.BoardResponseDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
+import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.exception.APIResponse;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ValidationException;
@@ -61,9 +62,37 @@ public class BoardController {
         );
     }
 
+    // 게시글 하나 보기
+    @GetMapping("/get-article/{id}")
+    public ResponseEntity<?> getArticle(@PathVariable(value = "id") Long id,
+                                        HttpServletRequest request
+                                        ) {
+        log.info("Controller Layer: get-article/{id} => " + id);
+        HttpSession session = request.getSession();
+        // 인증/인가 작업 예외 처리
+        if (session.getAttribute("user") == null) {
+            throw new AuthenticationException(ErrorStatus.NO_AUTHENTICATION);
+        }
+        log.info("Client IP Address: " + request.getRemoteAddr());
+        long startTime = System.currentTimeMillis();
+
+        User user = (User) session.getAttribute("user");
+        BoardResponseDto.OneArticleResponseDto oneArticleResponseDto = boardService.getOneArticle(id, user);
+        APIResponse apiResponse = APIResponse.builder()
+                .status(SuccessStatus.GET_ARTICLE_SUCCESS.getStatus())
+                .code(SuccessStatus.GET_ARTICLE_SUCCESS.getCode())
+                .message(SuccessStatus.GET_ARTICLE_SUCCESS.getMessage())
+                .result(oneArticleResponseDto)
+                .build();
+
+        long endTime = System.currentTimeMillis();
+        log.info("Get Article Time: " + (endTime - startTime) + "ms");
+        return APIResponse.toResponseEntity(apiResponse);
+    }
+
     // 게시글 불러오기
     @GetMapping("/get-articles")
-    public ResponseEntity<?> getArticle(
+    public ResponseEntity<?> getArticles(
             // 쿼리 파라미터 -> DTO 변환 => 유효성 검사 가능
             @Valid @ModelAttribute BoardRequestDto.GetArticleRequestParameters getArticleRequestParameters,
             BindingResult bindingResult,
@@ -105,7 +134,7 @@ public class BoardController {
     }
 
     // 제목 검색 기능
-    @GetMapping("/get-article-with-title")
+    @GetMapping("/get-articles-with-title")
     public ResponseEntity<?> getArticleWithTitle(
             // 파라미터로 page, size, title받음.
             @Valid @ModelAttribute BoardRequestDto.GetArticleWithTitleRequestParameters getArticleWithTitleRequestParameters,

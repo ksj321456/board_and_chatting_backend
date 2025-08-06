@@ -4,9 +4,11 @@ import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.BoardRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.dto.response_dto.BoardResponseDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
+import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.repository.board_repository.BoardRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @Service
 @Primary
+@Slf4j
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
@@ -98,5 +101,46 @@ public class BoardServiceImpl implements BoardService {
                 .build();
 
         return generalArticlesResponseDto;
+    }
+
+    @Override
+    // id를 통해 Article 검색
+    // authority를 통해 if 관리자 -> 수정, 삭제 권한 있음
+    // else -> 해당 게시물을 작성한 회원일 경우에만 수정, 삭제 가능 그 외의 회원은 수정, 삭제 불가
+    public BoardResponseDto.OneArticleResponseDto getOneArticle(Long id, User user) {
+        // id를 통해 해당 글을 작성한 사람 GET
+        log.info("Service Layer: getOneArticle parameters => id = " +  id + ", user_nickname = " + user.getNickname());
+        Board board = boardRepository.findBoardByIdCustom(id);
+
+        // 해당 게시물을 작성한 사람과 요청한 사람이 같은 경우 => 수정, 삭제 권한 허용하면서 ResponseDTO 생성
+        // 혹은 HTTP 요청을 보낸 사람의 권한이 ADMIN인 경우 => 수정, 삭제 권한 허용하면서 ResponseDTO 생성
+        if (user.getUserId().equals(board.getUser().getUserId()) ||
+                user.getAuthority().getField().equals("admin")) {
+
+            BoardResponseDto.OneArticleResponseDto oneArticleResponseDto = BoardResponseDto.OneArticleResponseDto.builder()
+                    .title(board.getTitle())
+                    .category(board.getCategory())
+                    .content(board.getContent())
+                    .author(board.getUser().getNickname())
+                    .canDelete(true)
+                    .canUpdate(true)
+                    .createdAt(board.getCreatedAt())
+                    .updatedAt(board.getUpdatedAt())
+                    .build();
+            return oneArticleResponseDto;
+        }
+
+        // 그 외에는 수정, 삭제 권한 허용하지 않으면서 ResponseDTO 생성
+        BoardResponseDto.OneArticleResponseDto oneArticleResponseDto = BoardResponseDto.OneArticleResponseDto.builder()
+                .title(board.getTitle())
+                .category(board.getCategory())
+                .content(board.getContent())
+                .author(board.getUser().getNickname())
+                .canDelete(false)
+                .canUpdate(false)
+                .createdAt(board.getCreatedAt())
+                .updatedAt(board.getUpdatedAt())
+                .build();
+        return oneArticleResponseDto;
     }
 }

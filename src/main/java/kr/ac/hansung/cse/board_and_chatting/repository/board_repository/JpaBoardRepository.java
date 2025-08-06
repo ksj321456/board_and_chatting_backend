@@ -20,4 +20,8 @@ public interface JpaBoardRepository extends JpaRepository<Board, Long> {
     @Query(value = "SELECT b FROM Board b JOIN FETCH b.user WHERE b.title LIKE CONCAT('%', :title, '%') ORDER BY b.createdAt DESC",
             countQuery = "SELECT COUNT(b) FROM Board b WHERE b.title LIKE CONCAT('%', :title, '%')")
     Page<Board> findAllByTitleCustom(@Param("title") String title, Pageable pageable);
+
+    // Fetch join으로 Board와 매핑되어 있는 User 객체도 함께 GET
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.user WHERE b.id = :id")
+    Optional<Board> findBoardByIdCustom(@Param("id") Long id);
 }
