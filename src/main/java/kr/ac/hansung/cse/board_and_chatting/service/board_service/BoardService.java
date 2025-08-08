@@ -16,5 +16,7 @@ public interface BoardService {
 
     BoardResponseDto.GeneralArticlesResponseDto getArticlesWithTitle(String title, int page, int size);
 
+    BoardResponseDto.GeneralArticlesResponseDto getArticleWithTitleOrContent(String title, String content, int page, int size);
+
     BoardResponseDto.OneArticleResponseDto getOneArticle(Long id, User user);
 }

@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-//@Component
+@Component
 @Slf4j
 public class ProjectInitializer {
 

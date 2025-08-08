@@ -3,6 +3,8 @@ package kr.ac.hansung.cse.board_and_chatting.entity;
 import jakarta.persistence.*;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ import java.util.List;
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "user_login_id_unique",
-                        columnNames = {"user_login_id"}
+                        name = "user_login_id_and_nickname_unique",
+                        columnNames = {"user_login_id", "nickname"}
                 )
         }
 )

@@ -57,6 +57,11 @@ public class BoardJpaRepository implements BoardRepository {
     }
 
     @Override
+    public Page<Board> findAllByTitleAndContentCustom(String title, String content, Pageable pageable) {
+        return boardRepository.findAllByTitleAndContentCustom(title, content, pageable);
+    }
+
+    @Override
     public Board findBoardByIdCustom(Long boardId) {
         Optional<Board> boardOptional = boardRepository.findBoardByIdCustom(boardId);
         log.info("Repository Layer: findBoardByIdCustom is exist => " + boardOptional.isPresent());

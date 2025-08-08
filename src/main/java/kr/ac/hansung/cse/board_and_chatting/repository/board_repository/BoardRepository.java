@@ -13,5 +13,7 @@ public interface BoardRepository {
 
     Page<Board> findAllByTitleCustom(String title, Pageable pageable);
 
+    Page<Board> findAllByTitleAndContentCustom(String title, String content, Pageable pageable);
+
     Board findBoardByIdCustom(Long boardId);
 }

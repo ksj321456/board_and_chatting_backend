@@ -104,6 +104,31 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public BoardResponseDto.GeneralArticlesResponseDto getArticleWithTitleOrContent(String title, String content, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> boards = boardRepository.findAllByTitleAndContentCustom(title, content, pageable);
+        long totalPages = boards.getTotalPages();
+
+        List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
+        boards.forEach(board -> {
+            BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .category(board.getCategory())
+                    .author(board.getUser().getNickname())
+                    .createdAt(board.getCreatedAt())
+                    .updatedAt(board.getUpdatedAt())
+                    .build();
+            articles.add(articleResponseDto);
+        });
+        BoardResponseDto.GeneralArticlesResponseDto generalArticlesResponseDto = BoardResponseDto.GeneralArticlesResponseDto.builder()
+                .totalPages(totalPages)
+                .articles(articles)
+                .build();
+        return generalArticlesResponseDto;
+    }
+
+    @Override
     // id를 통해 Article 검색
     // authority를 통해 if 관리자 -> 수정, 삭제 권한 있음
     // else -> 해당 게시물을 작성한 회원일 경우에만 수정, 삭제 가능 그 외의 회원은 수정, 삭제 불가

@@ -172,4 +172,43 @@ public class BoardController {
 
         return APIResponse.toResponseEntity(apiResponse);
     }
+
+    @GetMapping("/get-articles-with-title-and-content")
+    public <T> ResponseEntity<APIResponse<T>> getArticleWithTitleAndContent(
+            @Valid @ModelAttribute BoardRequestDto.GetArticleWithTitleOrContentRequestParameters getArticleWithTitleAndContentRequestParameters,
+            BindingResult bindingResult,
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession();
+        // 인증/인가 작업 예외 처리
+        if (session.getAttribute("user") == null) {
+            throw new AuthenticationException(ErrorStatus.NO_AUTHENTICATION);
+        }
+
+        // 유효성 검사 예외 처리
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult, ErrorStatus.MISSING_REQUIRED_PARAMETERS);
+        }
+        long startTime = System.currentTimeMillis();
+        log.info("Client IP Address: " + request.getRemoteAddr());
+
+        String title = getArticleWithTitleAndContentRequestParameters.getTitle();
+        String content = getArticleWithTitleAndContentRequestParameters.getContent();
+        int page = getArticleWithTitleAndContentRequestParameters.getPage();
+        int size = getArticleWithTitleAndContentRequestParameters.getSize();
+
+        BoardResponseDto.GeneralArticlesResponseDto generalArticlesResponseDto = boardService.getArticleWithTitleOrContent(title, content, page, size);
+
+        APIResponse apiResponse = APIResponse.builder()
+                .status(SuccessStatus.GET_ARTICLES_SUCCESS.getStatus())
+                .code(SuccessStatus.GET_ARTICLES_SUCCESS.getCode())
+                .message(SuccessStatus.GET_ARTICLES_SUCCESS.getMessage())
+                .result(generalArticlesResponseDto)
+                .build();
+
+        long endTime = System.currentTimeMillis();
+        log.info("Total time taken: " + (endTime - startTime) + "ms");
+
+        return APIResponse.toResponseEntity(apiResponse);
+    }
 }
