@@ -51,6 +51,12 @@ public class Board implements BaseEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    // 좋아요
+    private int like;
+
+    // 싫어요
+    private int dislike;
+
     @Override
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
