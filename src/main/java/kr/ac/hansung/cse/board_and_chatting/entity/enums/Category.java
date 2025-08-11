@@ -8,7 +8,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Category {
-    FREE("자유 게시판")
+    FREE("자유 게시판"),
+    SECRET("비밀 게시판")
 
 
     ;

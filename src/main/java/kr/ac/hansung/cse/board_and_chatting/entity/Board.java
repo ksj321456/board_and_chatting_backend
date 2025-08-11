@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -20,7 +22,7 @@ import java.time.LocalDateTime;
                 columnNames = {"title"}
         )
 })
-public class Board {
+public class Board implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +48,16 @@ public class Board {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @PrePersist
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @Override
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    @PreUpdate
+    @Override
     public void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }

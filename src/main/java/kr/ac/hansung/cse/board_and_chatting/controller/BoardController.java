@@ -20,6 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 @RestController
 @RequestMapping("/api")
 @Slf4j
@@ -90,7 +93,7 @@ public class BoardController {
         return APIResponse.toResponseEntity(apiResponse);
     }
 
-    // 게시글 불러오기
+    // 게시글 전체 불러오기
     @GetMapping("/get-articles")
     public ResponseEntity<?> getArticles(
             // 쿼리 파라미터 -> DTO 변환 => 유효성 검사 가능
@@ -133,7 +136,7 @@ public class BoardController {
         return APIResponse.toResponseEntity(apiResponse);
     }
 
-    // 제목 검색 기능
+    // 게시글 제목 검색 기능
     @GetMapping("/get-articles-with-title")
     public ResponseEntity<?> getArticleWithTitle(
             // 파라미터로 page, size, title받음.
@@ -173,6 +176,7 @@ public class BoardController {
         return APIResponse.toResponseEntity(apiResponse);
     }
 
+    // 게시글 제목 OR 내용 검색 기능
     @GetMapping("/get-articles-with-title-and-content")
     public <T> ResponseEntity<APIResponse<T>> getArticleWithTitleAndContent(
             @Valid @ModelAttribute BoardRequestDto.GetArticleWithTitleOrContentRequestParameters getArticleWithTitleAndContentRequestParameters,

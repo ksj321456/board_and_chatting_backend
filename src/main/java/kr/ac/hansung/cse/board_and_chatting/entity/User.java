@@ -24,7 +24,7 @@ import java.util.List;
                 )
         }
 )
-public class User {
+public class User implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,9 +53,17 @@ public class User {
 
     private LocalDateTime createdAt;
 
-    @PrePersist
+    private LocalDateTime updatedAt;
+
+    @Override
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
 }
