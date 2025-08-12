@@ -53,7 +53,6 @@ public class Board implements BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @Fetch(FetchMode.SUBSELECT)
     private List<Comment> comments = new ArrayList<>();
 
     // 좋아요

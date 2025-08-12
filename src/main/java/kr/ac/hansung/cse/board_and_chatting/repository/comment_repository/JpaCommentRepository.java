@@ -10,9 +10,10 @@ import java.util.List;
 
 public interface JpaCommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query("SELECT new kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.CommentCountWithOneArticleDto(b.id, COUNT(c)) " +
+    @Query("SELECT new kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.CommentCountWithOneArticleDto(b.id, COUNT(c.id)) " +
             "FROM Board b LEFT JOIN b.comments c " +
             "WHERE b.id IN :boardIds " +
-            "GROUP BY b.id")
+            "GROUP BY b.id " +
+            "ORDER BY b.createdAt DESC")
     List<CommentCountWithOneArticleDto> findCommentCountCustom(@Param("boardIds") List<Long> boardIds);
 }
