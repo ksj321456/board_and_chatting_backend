@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-@Primary
 @Slf4j
 public class BoardJpaRepository implements BoardRepository {
 

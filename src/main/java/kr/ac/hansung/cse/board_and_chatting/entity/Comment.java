@@ -26,17 +26,23 @@ public class Comment implements BaseEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     @Override
+    @PrePersist
     public void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
     @Override
+    @PreUpdate
     public void onUpdate() {
         createdAt = LocalDateTime.now();
     }

@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,21 +53,29 @@ public class Board implements BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Comment> comments = new ArrayList<>();
 
     // 좋아요
-    private int like;
+    @Column(nullable = false, name = "likes")
+    // 명시적으로 값을 넣지 않아도 DB 저장 시 자동으로 0L 값 삽입하는 역할
+    @Builder.Default
+    private Long like = 0L;
 
     // 싫어요
-    private int dislike;
+    @Column(nullable = false, name = "dislikes")
+    @Builder.Default
+    private Long dislike = 0L;
 
     @Override
+    @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     @Override
+    @PreUpdate
     public void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }

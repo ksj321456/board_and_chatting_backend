@@ -7,9 +7,7 @@ import java.time.LocalDateTime;
 
 public interface BaseEntity {
 
-    @PrePersist
     void onCreate();
 
-    @PreUpdate
     void onUpdate();
 }

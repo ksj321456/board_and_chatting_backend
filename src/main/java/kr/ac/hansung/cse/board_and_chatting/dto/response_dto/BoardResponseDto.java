@@ -26,13 +26,20 @@ public class BoardResponseDto {
     public static class ArticleResponseDto {
         private String title;
 
-        private String content;
-
         @JsonProperty("category")
         private Category category;
 
         // 작성자 이름
         private String author;
+
+        // 댓글 수
+        private Long commentCount;
+
+        // 좋아요
+        private Long like;
+
+        // 싫어요
+        private Long dislike;
 
         private LocalDateTime createdAt;
 

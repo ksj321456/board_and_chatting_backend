@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.board_and_chatting.service.board_service;
 
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.CommentCountWithOneArticleDto;
 import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.BoardRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.dto.response_dto.BoardResponseDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
@@ -8,6 +9,8 @@ import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.repository.board_repository.BoardRepository;
+import kr.ac.hansung.cse.board_and_chatting.repository.comment_repository.CommentRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -21,16 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Primary
 @Slf4j
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
 
-    @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
-    }
+    private final CommentRepository commentRepository;
+
 
     @Transactional
     public Board saveArticle(BoardRequestDto.CreateArticleRequest createArticleRequest, User user) {
@@ -52,20 +53,33 @@ public class BoardServiceImpl implements BoardService {
     public BoardResponseDto.GeneralArticlesResponseDto getArticle(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boards = boardRepository.findAllWithUser(pageable);
+
+        List<Long> boardIds = new ArrayList<>();
+        for (Board board : boards.getContent()) {
+            boardIds.add(board.getId());
+        }
+        List<CommentCountWithOneArticleDto> commentCountWithOneArticleDtos = commentRepository.findCommentCountCustom(boardIds);
+
         long totalPages = boards.getTotalPages();
         List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
+        List<Board> boardList = boards.getContent();
 
-        boards.forEach(board -> {
+        for (int i = 0; i < boardList.size(); i++) {
+            Board board = boardList.get(i);
+            CommentCountWithOneArticleDto commentCountWithOneArticleDto = commentCountWithOneArticleDtos.get(i);
+
             BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
                     .title(board.getTitle())
-                    .content(board.getContent())
-                    .category(board.getCategory())
                     .author(board.getUser().getNickname())
+                    .category(board.getCategory())
+                    .commentCount(commentCountWithOneArticleDto.getCommentCount())
+                    .like(board.getLike())
+                    .dislike(board.getDislike())
                     .createdAt(board.getCreatedAt())
                     .updatedAt(board.getUpdatedAt())
                     .build();
             articles.add(articleResponseDto);
-        });
+        }
 
         BoardResponseDto.GeneralArticlesResponseDto generalArticlesResponseDto = BoardResponseDto.GeneralArticlesResponseDto
                 .builder()
@@ -86,7 +100,6 @@ public class BoardServiceImpl implements BoardService {
         boards.forEach(board -> {
             BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
                     .title(board.getTitle())
-                    .content(board.getContent())
                     .category(board.getCategory())
                     .author(board.getUser().getNickname())
                     .createdAt(board.getCreatedAt())
@@ -113,7 +126,6 @@ public class BoardServiceImpl implements BoardService {
         boards.forEach(board -> {
             BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
                     .title(board.getTitle())
-                    .content(board.getContent())
                     .category(board.getCategory())
                     .author(board.getUser().getNickname())
                     .createdAt(board.getCreatedAt())

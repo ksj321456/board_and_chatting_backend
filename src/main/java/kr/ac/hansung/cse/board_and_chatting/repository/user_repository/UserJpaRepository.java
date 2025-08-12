@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-@Primary
 //@Profile("jpa")
 public class UserJpaRepository implements UserRepository {
 
