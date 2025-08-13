@@ -14,5 +14,5 @@ public interface CommentRepository {
 
     List<CommentDto> findCommentCountCustom(List<Long> board_comment_id);
 
-    List<CommentsInOneArticle> findCommentByBoardIdCustom(Long boardId, Pageable pageable);
+    List<CommentDto> findCommentByBoardIdCustom(Long boardId, Pageable pageable);
 }

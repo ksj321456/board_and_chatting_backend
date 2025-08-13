@@ -75,7 +75,7 @@ public class BoardResponseDto {
 
         private Long dislike;
 
-        private List<CommentsInOneArticle> comments = new ArrayList<>();
+        private List<CommentDto> comments = new ArrayList<>();
 
         private LocalDateTime createdAt;
 

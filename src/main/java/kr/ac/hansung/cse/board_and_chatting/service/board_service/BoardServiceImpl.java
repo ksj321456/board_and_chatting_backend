@@ -151,7 +151,7 @@ public class BoardServiceImpl implements BoardService {
         log.info("Service Layer: getOneArticle parameters => id = " +  id + ", user_nickname = " + user.getNickname());
         Board board = boardRepository.findBoardByIdCustom(id);
 
-        List<CommentsInOneArticle> queryResult = commentRepository.findCommentByBoardIdCustom(board.getId(), PageRequest.of(commentPage, commentSize));
+        List<CommentDto> queryResult = commentRepository.findCommentByBoardIdCustom(board.getId(), PageRequest.of(commentPage, commentSize));
 
         // 해당 게시물을 작성한 사람과 요청한 사람이 같은 경우 => 수정, 삭제 권한 허용하면서 ResponseDTO 생성
         // 혹은 HTTP 요청을 보낸 사람의 권한이 ADMIN인 경우 => 수정, 삭제 권한 허용하면서 ResponseDTO 생성

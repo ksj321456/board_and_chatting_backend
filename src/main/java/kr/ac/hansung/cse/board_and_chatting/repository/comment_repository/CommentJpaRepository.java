@@ -29,7 +29,7 @@ public class CommentJpaRepository implements CommentRepository {
     }
 
     @Override
-    public List<CommentsInOneArticle> findCommentByBoardIdCustom(Long boardId, Pageable pageable) {
+    public List<CommentDto> findCommentByBoardIdCustom(Long boardId, Pageable pageable) {
         return jpaCommentRepository.findCommentByBoardIdCustom(boardId, pageable);
     }
 }

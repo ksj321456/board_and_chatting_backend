@@ -27,5 +27,5 @@ public interface JpaCommentRepository extends JpaRepository<Comment, Long> {
             "WHERE c.board.id = :boardId " +
             "ORDER BY c.createdAt DESC",
             countQuery = "SELECT COUNT(*) FROM Comment c WHERE c.board.id = :boardId")
-    List<CommentsInOneArticle> findCommentByBoardIdCustom(@Param("boardId") Long boardId, Pageable pageable);
+    List<CommentDto> findCommentByBoardIdCustom(@Param("boardId") Long boardId, Pageable pageable);
 }
