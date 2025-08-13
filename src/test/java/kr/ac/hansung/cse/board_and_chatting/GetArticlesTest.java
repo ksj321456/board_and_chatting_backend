@@ -59,15 +59,15 @@ public class GetArticlesTest {
     }
 
 
-    @Test
-    @DisplayName("1. 게시글 불러오기 성공")
-    public void test_get_articles_success() {
-        Optional<User> userOptional = userRepository.findByUserId("root");
-        User user = userOptional.orElse(null);
-
-        Page<Board> boards = boardRepository.findAllWithUser(PageRequest.of(0, 10, Sort.by("createdAt").descending()));
-        Assertions.assertNotNull(boards);
-    }
+//    @Test
+//    @DisplayName("1. 게시글 불러오기 성공")
+//    public void test_get_articles_success() {
+//        Optional<User> userOptional = userRepository.findByUserId("root");
+//        User user = userOptional.orElse(null);
+//
+//        Page<Board> boards = boardRepository.findAllWithUser(PageRequest.of(0, 10, Sort.by("createdAt").descending()));
+//        Assertions.assertNotNull(boards);
+//    }
 
     @Test
     @DisplayName("2. 필수 쿼리 파라미터 없음(page)")

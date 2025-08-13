@@ -1,12 +1,10 @@
 package kr.ac.hansung.cse.board_and_chatting.service.board_service;
 
-import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentCountWithOneArticleDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.board_dto.BoardDto;
 import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentDto;
-import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentsInOneArticle;
 import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.BoardRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.dto.response_dto.BoardResponseDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
-import kr.ac.hansung.cse.board_and_chatting.entity.Comment;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
@@ -20,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,26 +50,26 @@ public class BoardServiceImpl implements BoardService {
 
     public BoardResponseDto.GeneralArticlesResponseDto getArticle(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Board> boards = boardRepository.findAllWithUser(pageable);
+        Page<BoardDto> boards = boardRepository.findAllWithUser(pageable);
 
         List<Long> boardIds = new ArrayList<>();
-        for (Board board : boards.getContent()) {
-            boardIds.add(board.getId());
+        for (BoardDto board : boards.getContent()) {
+            boardIds.add(board.getBoardId());
         }
         List<CommentDto> commentCountWithOneArticleDtos = commentRepository.findCommentCountCustom(boardIds);
 
         long totalPages = boards.getTotalPages();
         List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
-        List<Board> boardList = boards.getContent();
+        List<BoardDto> boardList = boards.getContent();
 
         for (int i = 0; i < boardList.size(); i++) {
-            Board board = boardList.get(i);
+            BoardDto board = boardList.get(i);
             CommentDto commentCountWithOneArticleDto = commentCountWithOneArticleDtos.get(i);
 
             BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
-                    .boardId(board.getId())
+                    .boardId(board.getBoardId())
                     .title(board.getTitle())
-                    .author(board.getUser().getNickname())
+                    .author(board.getAuthor())
                     .category(board.getCategory())
                     .commentCount(commentCountWithOneArticleDto.getCommentCount())
                     .like(board.getLike())
@@ -95,20 +92,34 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardResponseDto.GeneralArticlesResponseDto getArticlesWithTitle(String title, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Board> boards = boardRepository.findAllByTitleCustom(title, pageable);
+        Page<BoardDto> boards = boardRepository.findAllByTitleCustom(title, pageable);
         long totalPages = boards.getTotalPages();
 
+        List<Long> boardIds = new ArrayList<>();
+        for (BoardDto board : boards.getContent()) {
+            boardIds.add(board.getBoardId());
+        }
+
+        List<CommentDto> commentDtoList = commentRepository.findCommentCountCustom(boardIds);
+
         List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
-        boards.forEach(board -> {
+
+        for (int i = 0; i < boards.getContent().size(); i++) {
+            BoardDto board = boards.getContent().get(i);
             BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
+                    .boardId(board.getBoardId())
                     .title(board.getTitle())
                     .category(board.getCategory())
-                    .author(board.getUser().getNickname())
+                    .author(board.getAuthor())
+                    .like(board.getLike())
+                    .dislike(board.getDislike())
+                    .commentCount(commentDtoList.get(0).getCommentCount())
                     .createdAt(board.getCreatedAt())
                     .updatedAt(board.getUpdatedAt())
                     .build();
             articles.add(articleResponseDto);
-        });
+        }
+
         BoardResponseDto.GeneralArticlesResponseDto generalArticlesResponseDto = BoardResponseDto.GeneralArticlesResponseDto
                 .builder()
                 .totalPages(totalPages)
@@ -121,20 +132,34 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardResponseDto.GeneralArticlesResponseDto getArticleWithTitleOrContent(String title, String content, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Board> boards = boardRepository.findAllByTitleAndContentCustom(title, content, pageable);
+        Page<BoardDto> boards = boardRepository.findAllByTitleAndContentCustom(title, content, pageable);
         long totalPages = boards.getTotalPages();
 
+        List<Long> boardIds = new ArrayList<>();
+        for (BoardDto board : boards.getContent()) {
+            boardIds.add(board.getBoardId());
+        }
+
+        List<CommentDto> commentDtoList = commentRepository.findCommentCountCustom(boardIds);
+
         List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
-        boards.forEach(board -> {
+
+        for (int i = 0; i < boards.getContent().size(); i++) {
+            BoardDto board = boards.getContent().get(i);
             BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
+                    .boardId(board.getBoardId())
                     .title(board.getTitle())
                     .category(board.getCategory())
-                    .author(board.getUser().getNickname())
+                    .author(board.getAuthor())
+                    .like(board.getLike())
+                    .dislike(board.getDislike())
+                    .commentCount(commentDtoList.get(0).getCommentCount())
                     .createdAt(board.getCreatedAt())
                     .updatedAt(board.getUpdatedAt())
                     .build();
             articles.add(articleResponseDto);
-        });
+        }
+
         BoardResponseDto.GeneralArticlesResponseDto generalArticlesResponseDto = BoardResponseDto.GeneralArticlesResponseDto.builder()
                 .totalPages(totalPages)
                 .articles(articles)

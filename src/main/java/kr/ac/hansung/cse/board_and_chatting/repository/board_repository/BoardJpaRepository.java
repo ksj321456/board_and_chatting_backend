@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.board_and_chatting.repository.board_repository;
 
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.board_dto.BoardDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.ServerInternalException;
@@ -46,17 +47,17 @@ public class BoardJpaRepository implements BoardRepository {
 
     // DB에 저장되어 있는 모든 게시물 보여주기
     @Override
-    public Page<Board> findAllWithUser(Pageable pageable) {
+    public Page<BoardDto> findAllWithUser(Pageable pageable) {
         return boardRepository.findAllWithUser(pageable);
     }
 
     @Override
-    public Page<Board> findAllByTitleCustom(String title, Pageable pageable) {
+    public Page<BoardDto> findAllByTitleCustom(String title, Pageable pageable) {
         return boardRepository.findAllByTitleCustom(title, pageable);
     }
 
     @Override
-    public Page<Board> findAllByTitleAndContentCustom(String title, String content, Pageable pageable) {
+    public Page<BoardDto> findAllByTitleAndContentCustom(String title, String content, Pageable pageable) {
         return boardRepository.findAllByTitleAndContentCustom(title, content, pageable);
     }
 

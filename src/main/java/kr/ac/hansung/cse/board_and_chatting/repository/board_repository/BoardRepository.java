@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.board_and_chatting.repository.board_repository;
 
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.board_dto.BoardDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,11 +10,11 @@ public interface BoardRepository {
 
     Board findBoardById(Long boardId);
 
-    Page<Board> findAllWithUser(Pageable pageable);
+    Page<BoardDto> findAllWithUser(Pageable pageable);
 
-    Page<Board> findAllByTitleCustom(String title, Pageable pageable);
+    Page<BoardDto> findAllByTitleCustom(String title, Pageable pageable);
 
-    Page<Board> findAllByTitleAndContentCustom(String title, String content, Pageable pageable);
+    Page<BoardDto> findAllByTitleAndContentCustom(String title, String content, Pageable pageable);
 
     Board findBoardByIdCustom(Long boardId);
 }
