@@ -1,17 +1,15 @@
 package kr.ac.hansung.cse.board_and_chatting.repository.comment_repository;
 
-import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.CommentCountWithOneArticleDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentCountWithOneArticleDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentsInOneArticle;
 import kr.ac.hansung.cse.board_and_chatting.entity.Comment;
-import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
-import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Primary;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -26,7 +24,12 @@ public class CommentJpaRepository implements CommentRepository {
     }
 
     @Override
-    public List<CommentCountWithOneArticleDto> findCommentCountCustom(List<Long> board_comment_id) {
+    public List<CommentDto> findCommentCountCustom(List<Long> board_comment_id) {
         return jpaCommentRepository.findCommentCountCustom(board_comment_id);
+    }
+
+    @Override
+    public List<CommentsInOneArticle> findCommentByBoardIdCustom(Long boardId, Pageable pageable) {
+        return jpaCommentRepository.findCommentByBoardIdCustom(boardId, pageable);
     }
 }

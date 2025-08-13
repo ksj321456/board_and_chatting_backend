@@ -1,12 +1,16 @@
 package kr.ac.hansung.cse.board_and_chatting.dto.response_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentsInOneArticle;
+import kr.ac.hansung.cse.board_and_chatting.entity.Comment;
 import kr.ac.hansung.cse.board_and_chatting.entity.enums.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BoardResponseDto {
@@ -24,6 +28,9 @@ public class BoardResponseDto {
     @AllArgsConstructor
     @Builder
     public static class ArticleResponseDto {
+
+        private Long boardId;
+
         private String title;
 
         @JsonProperty("category")
@@ -63,6 +70,12 @@ public class BoardResponseDto {
 
         // 삭제할 수 있는가? => 즉, 권한이 있는가?
         private boolean canDelete;
+
+        private Long like;
+
+        private Long dislike;
+
+        private List<CommentsInOneArticle> comments = new ArrayList<>();
 
         private LocalDateTime createdAt;
 

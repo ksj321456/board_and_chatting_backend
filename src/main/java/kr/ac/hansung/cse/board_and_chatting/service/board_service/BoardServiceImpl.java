@@ -1,25 +1,26 @@
 package kr.ac.hansung.cse.board_and_chatting.service.board_service;
 
-import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.CommentCountWithOneArticleDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentCountWithOneArticleDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentDto;
+import kr.ac.hansung.cse.board_and_chatting.dto.jpa_dto.comment_dto.CommentsInOneArticle;
 import kr.ac.hansung.cse.board_and_chatting.dto.request_dto.BoardRequestDto;
 import kr.ac.hansung.cse.board_and_chatting.dto.response_dto.BoardResponseDto;
 import kr.ac.hansung.cse.board_and_chatting.entity.Board;
+import kr.ac.hansung.cse.board_and_chatting.entity.Comment;
 import kr.ac.hansung.cse.board_and_chatting.entity.User;
-import kr.ac.hansung.cse.board_and_chatting.entity.enums.Authority;
 import kr.ac.hansung.cse.board_and_chatting.exception.exceptions.AuthenticationException;
 import kr.ac.hansung.cse.board_and_chatting.exception.status.ErrorStatus;
 import kr.ac.hansung.cse.board_and_chatting.repository.board_repository.BoardRepository;
 import kr.ac.hansung.cse.board_and_chatting.repository.comment_repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class BoardServiceImpl implements BoardService {
         for (Board board : boards.getContent()) {
             boardIds.add(board.getId());
         }
-        List<CommentCountWithOneArticleDto> commentCountWithOneArticleDtos = commentRepository.findCommentCountCustom(boardIds);
+        List<CommentDto> commentCountWithOneArticleDtos = commentRepository.findCommentCountCustom(boardIds);
 
         long totalPages = boards.getTotalPages();
         List<BoardResponseDto.ArticleResponseDto> articles = new ArrayList<>();
@@ -66,9 +67,10 @@ public class BoardServiceImpl implements BoardService {
 
         for (int i = 0; i < boardList.size(); i++) {
             Board board = boardList.get(i);
-            CommentCountWithOneArticleDto commentCountWithOneArticleDto = commentCountWithOneArticleDtos.get(i);
+            CommentDto commentCountWithOneArticleDto = commentCountWithOneArticleDtos.get(i);
 
             BoardResponseDto.ArticleResponseDto articleResponseDto = BoardResponseDto.ArticleResponseDto.builder()
+                    .boardId(board.getId())
                     .title(board.getTitle())
                     .author(board.getUser().getNickname())
                     .category(board.getCategory())
@@ -144,10 +146,12 @@ public class BoardServiceImpl implements BoardService {
     // id를 통해 Article 검색
     // authority를 통해 if 관리자 -> 수정, 삭제 권한 있음
     // else -> 해당 게시물을 작성한 회원일 경우에만 수정, 삭제 가능 그 외의 회원은 수정, 삭제 불가
-    public BoardResponseDto.OneArticleResponseDto getOneArticle(Long id, User user) {
+    public BoardResponseDto.OneArticleResponseDto getOneArticle(Long id, User user, int commentPage, int commentSize) {
         // id를 통해 해당 글을 작성한 사람 GET
         log.info("Service Layer: getOneArticle parameters => id = " +  id + ", user_nickname = " + user.getNickname());
         Board board = boardRepository.findBoardByIdCustom(id);
+
+        List<CommentsInOneArticle> queryResult = commentRepository.findCommentByBoardIdCustom(board.getId(), PageRequest.of(commentPage, commentSize));
 
         // 해당 게시물을 작성한 사람과 요청한 사람이 같은 경우 => 수정, 삭제 권한 허용하면서 ResponseDTO 생성
         // 혹은 HTTP 요청을 보낸 사람의 권한이 ADMIN인 경우 => 수정, 삭제 권한 허용하면서 ResponseDTO 생성
@@ -161,6 +165,9 @@ public class BoardServiceImpl implements BoardService {
                     .author(board.getUser().getNickname())
                     .canDelete(true)
                     .canUpdate(true)
+                    .like(board.getLike())
+                    .dislike(board.getDislike())
+                    .comments(queryResult)
                     .createdAt(board.getCreatedAt())
                     .updatedAt(board.getUpdatedAt())
                     .build();
@@ -175,6 +182,9 @@ public class BoardServiceImpl implements BoardService {
                 .author(board.getUser().getNickname())
                 .canDelete(false)
                 .canUpdate(false)
+                .like(board.getLike())
+                .dislike(board.getDislike())
+                .comments(queryResult)
                 .createdAt(board.getCreatedAt())
                 .updatedAt(board.getUpdatedAt())
                 .build();

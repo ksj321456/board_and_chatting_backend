@@ -52,7 +52,7 @@ public class BoardController {
 
         User user = (User) session.getAttribute("user");
 
-        Board board = boardService.saveArticle(createArticleRequest, user);
+        boardService.saveArticle(createArticleRequest, user);
         return APIResponse.toResponseEntity(
                 APIResponse.builder()
                         .status(SuccessStatus.CREATE_ARTICLE_SUCCESS.getStatus())
@@ -65,6 +65,8 @@ public class BoardController {
     // 게시글 하나 보기
     @GetMapping("/get-article/{id}")
     public ResponseEntity<?> getArticle(@PathVariable(value = "id") Long id,
+                                        @RequestParam("page") int commentPage,
+                                        @RequestParam("size") int commentSize,
                                         HttpServletRequest request
                                         ) {
         log.info("Controller Layer: get-article/{id} => " + id);
@@ -77,7 +79,7 @@ public class BoardController {
         long startTime = System.currentTimeMillis();
 
         User user = (User) session.getAttribute("user");
-        BoardResponseDto.OneArticleResponseDto oneArticleResponseDto = boardService.getOneArticle(id, user);
+        BoardResponseDto.OneArticleResponseDto oneArticleResponseDto = boardService.getOneArticle(id, user, commentPage, commentSize);
         APIResponse apiResponse = APIResponse.builder()
                 .status(SuccessStatus.GET_ARTICLE_SUCCESS.getStatus())
                 .code(SuccessStatus.GET_ARTICLE_SUCCESS.getCode())
