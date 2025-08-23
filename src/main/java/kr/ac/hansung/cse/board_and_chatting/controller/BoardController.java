@@ -69,11 +69,14 @@ public class BoardController {
                                         @RequestParam("size") int commentSize,
                                         HttpServletRequest request
                                         ) {
+        log.info("Controller Layer: get-article/{id} => " + id);
         HttpSession session = request.getSession();
         // 인증/인가 작업 예외 처리
         if (session.getAttribute("user") == null) {
             throw new AuthenticationException(ErrorStatus.NO_AUTHENTICATION);
         }
+        log.info("Client IP Address: " + request.getRemoteAddr());
+        long startTime = System.currentTimeMillis();
 
         User user = (User) session.getAttribute("user");
         BoardResponseDto.OneArticleResponseDto oneArticleResponseDto = boardService.getOneArticle(id, user, commentPage, commentSize);
@@ -84,6 +87,8 @@ public class BoardController {
                 .result(oneArticleResponseDto)
                 .build();
 
+        long endTime = System.currentTimeMillis();
+        log.info("Get Article Time: " + (endTime - startTime) + "ms");
         return APIResponse.toResponseEntity(apiResponse);
     }
 
@@ -107,6 +112,9 @@ public class BoardController {
             throw new ValidationException(bindingResult, ErrorStatus.MISSING_REQUIRED_PARAMETERS);
         }
 
+        log.info("Client IP Address: " + request.getRemoteAddr());
+        long startTime = System.currentTimeMillis();
+
         // 페이징 처리 시 사용할 파라미터
         int page = getArticleRequestParameters.getPage();
         int size = getArticleRequestParameters.getSize();
@@ -120,6 +128,9 @@ public class BoardController {
                 .message(SuccessStatus.GET_ARTICLES_SUCCESS.getMessage())
                 .result(generalArticlesResponseDto)
                 .build();
+
+        long endTime = System.currentTimeMillis();
+        log.info("Take time: " + (endTime - startTime) + "ms");
 
         return APIResponse.toResponseEntity(apiResponse);
     }
@@ -142,6 +153,8 @@ public class BoardController {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult, ErrorStatus.MISSING_REQUIRED_PARAMETERS);
         }
+        long startTime = System.currentTimeMillis();
+        log.info("Client IP Address: " + request.getRemoteAddr());
 
         String title = getArticleWithTitleRequestParameters.getTitle();
         int page = getArticleWithTitleRequestParameters.getPage();
@@ -156,6 +169,8 @@ public class BoardController {
                 .message(SuccessStatus.GET_ARTICLES_SUCCESS.getMessage())
                 .result(generalArticlesResponseDto)
                 .build();
+        long endTime = System.currentTimeMillis();
+        log.info("Total time taken: " + (endTime - startTime) + "ms");
 
         return APIResponse.toResponseEntity(apiResponse);
     }
@@ -177,6 +192,8 @@ public class BoardController {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult, ErrorStatus.MISSING_REQUIRED_PARAMETERS);
         }
+        long startTime = System.currentTimeMillis();
+        log.info("Client IP Address: " + request.getRemoteAddr());
 
         String title = getArticleWithTitleAndContentRequestParameters.getTitle();
         String content = getArticleWithTitleAndContentRequestParameters.getContent();
@@ -191,6 +208,9 @@ public class BoardController {
                 .message(SuccessStatus.GET_ARTICLES_SUCCESS.getMessage())
                 .result(generalArticlesResponseDto)
                 .build();
+
+        long endTime = System.currentTimeMillis();
+        log.info("Total time taken: " + (endTime - startTime) + "ms");
 
         return APIResponse.toResponseEntity(apiResponse);
     }
