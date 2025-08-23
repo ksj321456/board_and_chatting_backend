@@ -68,7 +68,6 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult, ErrorStatus.NOT_SUFFICIENT_DATA_FOR_LOG_IN);
         }
-        long startTime = System.currentTimeMillis();
 
         // 로그인 처리
         User user = userService.loginService(loginDto);
@@ -76,9 +75,6 @@ public class UserController {
         // 세션 새로 생성
         HttpSession session = request.getSession(true);  // 없으면 새로 만듦
         session.setAttribute("user", user);
-
-        long endTime = System.currentTimeMillis();
-        log.info("Take time: " + (endTime - startTime) + "ms");
 
         return APIResponse.toResponseEntity(
                 APIResponse.builder()
