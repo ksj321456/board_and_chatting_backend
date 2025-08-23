@@ -39,6 +39,10 @@ public class GlobalExceptionAdvisor<T> {
                 ))
                 .toList();
 
+        log.error(String.valueOf(e.getErrorStatus().getStatus()));
+        log.error(e.getErrorStatus().getCode());
+        log.error(e.getErrorStatus().getMessage());
+
         return ErrorResponse.toResponseEntity(e.getErrorStatus(), errorList);
 
     }
